@@ -1,4 +1,4 @@
-.PHONY: test lint
+.PHONY: test lint lintfixer install
 
 test:
 	go test -v -cover ./...
@@ -8,3 +8,6 @@ lint:
 
 lintfixer:
 	golangci-lint run --fix ./...
+
+install:
+	go install ./cmd/...
