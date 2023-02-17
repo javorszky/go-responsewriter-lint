@@ -5,8 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/javorszky/responsewriter-linter/pkg/analyzer"
 	"golang.org/x/tools/go/analysis/analysistest"
+
+	"github.com/javorszky/responsewriter-linter/pkg/analyzer"
 )
 
 func TestAll(t *testing.T) {

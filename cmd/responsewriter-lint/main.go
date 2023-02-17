@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/javorszky/responsewriter-linter/pkg/analyzer"
 	"golang.org/x/tools/go/analysis/singlechecker"
+
+	"github.com/javorszky/responsewriter-linter/pkg/analyzer"
 )
 
 func main() {
