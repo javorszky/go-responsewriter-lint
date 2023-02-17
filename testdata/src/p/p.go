@@ -1,8 +1,25 @@
 package p
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 )
+
+type notAResponseWriter struct{}
+
+func (narw notAResponseWriter) Write(in []byte) (int, error) {
+	// actually do nothing
+	return 42, errors.New("no")
+}
+
+func (narw notAResponseWriter) WriteHeader(code int) {
+	// also do nothing
+}
+
+func (narw notAResponseWriter) Header() http.Header {
+	return http.Header{}
+}
 
 type bla struct{}
 
@@ -10,6 +27,18 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("some header", "value")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`boys in the yard`))
+}
+
+func someRandom(s string, r *http.Request) error {
+	fmt.Printf("this is a thing")
+
+	return nil
+}
+
+func fakeWriter(w notAResponseWriter) {
+	w.Header().Add("something", "other")
+	w.WriteHeader(420)
+	_, _ = w.Write([]byte(`fooled ya`))
 }
 
 func (b bla) method(w http.ResponseWriter, r *http.Request) {
