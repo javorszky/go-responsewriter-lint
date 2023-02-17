@@ -91,15 +91,15 @@ func run(pass *analysis.Pass) (interface{}, error) {
 						}
 
 						switch fX.Sel.Name {
-						case funcHeader:
+						case FuncHeader:
 							p := pass.Fset.Position(fX.Sel.NamePos)
-							lr.Record(funcHeader, p.Line, fX.Sel.Pos())
-						case funcWrite:
+							lr.Record(FuncHeader, p.Line, fX.Sel.Pos())
+						case FuncWrite:
 							p := pass.Fset.Position(fX.Sel.NamePos)
-							lr.Record(funcWrite, p.Line, fX.Sel.Pos())
-						case funcWriteHeader:
+							lr.Record(FuncWrite, p.Line, fX.Sel.Pos())
+						case FuncWriteHeader:
 							p := pass.Fset.Position(fX.Sel.NamePos)
-							lr.Record(funcWriteHeader, p.Line, fX.Sel.Pos())
+							lr.Record(FuncWriteHeader, p.Line, fX.Sel.Pos())
 						default:
 						}
 					}

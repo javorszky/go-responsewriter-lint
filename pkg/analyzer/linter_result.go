@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	funcHeader      = "Header"
-	funcWrite       = "Write"
-	funcWriteHeader = "WriteHeader"
+	FuncHeader      = "Header"
+	FuncWrite       = "Write"
+	FuncWriteHeader = "WriteHeader"
 )
 
 type linterError struct {
@@ -31,9 +31,9 @@ func NewLinterResult(fn string) *linterResult {
 	return &linterResult{
 		fn: fn,
 		calls: map[string][]position{
-			funcHeader:      make([]position, 0),
-			funcWrite:       make([]position, 0),
-			funcWriteHeader: make([]position, 0),
+			FuncHeader:      make([]position, 0),
+			FuncWrite:       make([]position, 0),
+			FuncWriteHeader: make([]position, 0),
 		},
 	}
 }
@@ -49,8 +49,8 @@ func (lr *linterResult) Errors() []linterError {
 	errs := make([]linterError, 0)
 
 	// Multiple calls to http.ResponseWriter.Write([]byte).
-	if len(lr.calls[funcWrite]) > 1 {
-		for _, l := range lr.calls[funcWrite] {
+	if len(lr.calls[FuncWrite]) > 1 {
+		for _, l := range lr.calls[FuncWrite] {
 			errs = append(errs, linterError{
 				message: "Multiple calls to http.ResponseWriter.Write in the same function body. This is most probably a bug.",
 				pos:     l.pos,
@@ -59,8 +59,8 @@ func (lr *linterResult) Errors() []linterError {
 	}
 
 	// Multiple calls to http.ResponseWriter.WriteHeader(int).
-	if len(lr.calls[funcWriteHeader]) > 1 {
-		for _, l := range lr.calls[funcWriteHeader] {
+	if len(lr.calls[FuncWriteHeader]) > 1 {
+		for _, l := range lr.calls[FuncWriteHeader] {
 			errs = append(errs, linterError{
 				message: "Multiple calls to http.ResponseWriter.WriteHeader in the same function body. This is most probably a bug.",
 				pos:     l.pos,
@@ -69,9 +69,9 @@ func (lr *linterResult) Errors() []linterError {
 	}
 
 	// Calling w.WriteHeader() after w.Write()
-	if len(lr.calls[funcWrite]) == 1 && len(lr.calls[funcWriteHeader]) == 1 {
-		writeLine := lr.calls[funcWrite][0]
-		whLine := lr.calls[funcWriteHeader][0]
+	if len(lr.calls[FuncWrite]) == 1 && len(lr.calls[FuncWriteHeader]) == 1 {
+		writeLine := lr.calls[FuncWrite][0]
+		whLine := lr.calls[FuncWriteHeader][0]
 		if whLine.line > writeLine.line {
 			errs = append(errs,
 				linterError{
@@ -83,8 +83,8 @@ func (lr *linterResult) Errors() []linterError {
 	}
 
 	// Calling w.Header() after w.WriteHeader() or w.Write()
-	for _, hl := range lr.calls[funcHeader] {
-		for _, wl := range lr.calls[funcWrite] {
+	for _, hl := range lr.calls[FuncHeader] {
+		for _, wl := range lr.calls[FuncWrite] {
 			if hl.line > wl.line {
 				errs = append(errs, linterError{
 					message: "http.ResponseWriter.Header called after calling http.ResponseWriter.Write. This has no effect.",
@@ -93,7 +93,7 @@ func (lr *linterResult) Errors() []linterError {
 			}
 		}
 
-		for _, whl := range lr.calls[funcWriteHeader] {
+		for _, whl := range lr.calls[FuncWriteHeader] {
 			if hl.line > whl.line {
 				errs = append(errs,
 					linterError{
