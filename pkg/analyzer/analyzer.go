@@ -8,11 +8,13 @@ import (
 	"golang.org/x/tools/go/ast/inspector"
 )
 
-var Analyzer = &analysis.Analyzer{
-	Name:     "responsewriterorder",
-	Doc:      "Checks that printf-like functions are named with `f` at the end.",
-	Run:      run,
-	Requires: []*analysis.Analyzer{inspect.Analyzer},
+func New() *analysis.Analyzer {
+	return &analysis.Analyzer{
+		Name:     "responsewriterlint",
+		Doc:      "Checks the order of method calls on http.ResponseWriter to flag potential bugs from out of order calls",
+		Run:      run,
+		Requires: []*analysis.Analyzer{inspect.Analyzer},
+	}
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
