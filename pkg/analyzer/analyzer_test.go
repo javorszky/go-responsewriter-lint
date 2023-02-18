@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/tools/go/analysis/analysistest"
 
-	"github.com/javorszky/responsewriter-linter/pkg/analyzer"
+	"github.com/javorszky/go-responsewriter-lint/pkg/analyzer"
 )
 
 func TestAll(t *testing.T) {
